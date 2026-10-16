@@ -14,6 +14,7 @@ tags:
   - name: Autenticación
   - name: Wallet
   - name: Contactos
+  - name: Payments
   - name: KYC
 security:
   - basicAuth: []
@@ -159,11 +160,82 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
+  /payments:
+    post:
+      tags: [Payments]
+      summary: Procesar un pago a un contacto del usuario autenticado
+      description: La wallet se obtiene del usuario autenticado y se habilita al crearla. Requiere un Idempotency-Key; los reintentos con la misma clave y los mismos datos devuelven la respuesta persistida sin repetir el pago al proveedor.
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 255
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '200':
+          description: Respuesta persistida devuelta para un reintento idempotente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentProviderResponse'
+        '201':
+          description: Pago procesado por el proveedor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentProviderResponse'
+        '400':
+          description: Clave de idempotencia o datos del pago inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: La wallet requiere una verificación KYC aprobada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: El usuario aún no tiene wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: La clave de idempotencia ya fue usada con otros datos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: El recipient no corresponde a un contacto del usuario autenticado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: El proveedor de pagos no respondió correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /kyc/verifications:
     post:
       tags: [KYC]
       summary: Solicitar verificación KYC
-      description: Envía los datos de identidad requeridos al proveedor externo. Solo usuarios autenticados. Si el resultado es approved, habilita payments_enabled en la wallet.
+      description: Envía los datos de identidad requeridos al proveedor externo y registra el resultado. Solo usuarios autenticados. La wallet queda habilitada para pagos al crearse.
       requestBody:
         required: true
         content:
@@ -272,14 +344,17 @@ components:
       properties:
         wallet_id:
           type: string
-          format: uuid
-          description: UUID v4 generado por el sistema
+          minLength: 23
+          maxLength: 23
+          pattern: '^wallet_[0-9a-f]{16}$'
+          example: wallet_cf10a55826d141a7
+          description: Identificador generado por el proveedor BCP
         status:
           type: string
           enum: [active]
         payments_enabled:
           type: boolean
-          description: true solo si la última verificación KYC está approved
+          description: true cuando la wallet está habilitada para pagos
         createdAt:
           type: string
           format: date-time
@@ -296,7 +371,10 @@ components:
           pattern: '^\+?[0-9]{9,15}$'
         wallet_id:
           type: string
-          format: uuid
+          minLength: 23
+          maxLength: 23
+          pattern: '^wallet_[0-9a-f]{16}$'
+          example: wallet_cf10a55826d141a7
     Contact:
       type: object
       required: [id, name, phone, wallet_id, createdAt]
@@ -310,10 +388,39 @@ components:
           type: string
         wallet_id:
           type: string
-          format: uuid
+          minLength: 23
+          maxLength: 23
+          pattern: '^wallet_[0-9a-f]{16}$'
+          example: wallet_cf10a55826d141a7
         createdAt:
           type: string
           format: date-time
+    PaymentRequest:
+      type: object
+      required: [recipient, amountCents, currency, scenario]
+      properties:
+        recipient:
+          type: string
+          format: uuid
+          maxLength: 36
+          description: ID del contacto previamente registrado por el usuario autenticado
+        amountCents:
+          type: integer
+          format: int64
+          minimum: 1
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          example: PEN
+        scenario:
+          type: string
+          minLength: 1
+          maxLength: 32
+          example: APPROVED
+    PaymentProviderResponse:
+      type: object
+      description: Objeto JSON devuelto por el proveedor BCP y persistido para los reintentos idempotentes
+      additionalProperties: true
     KycRequest:
       type: object
       required: [documentType, documentNumber, fullName, birthDate]
