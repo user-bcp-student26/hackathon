@@ -1,0 +1,377 @@
+openapi: 3.0.3
+info:
+  title: Wallet MVP - Backend API (H-01)
+  version: 1.0.0
+  description: |
+    Contrato del backend para la historia H-01 (registro, activación de wallet, contactos, autenticación y KYC).
+    Basado en [H-01](https://github.com/user-bcp-student26/hackathon/issues/1) y en [ADR-001](../adr/ADR-001-onboarding-wallet-kyc.md).
+    La autenticación usa HTTP Basic Auth sobre HTTPS, según ADR-001.
+servers:
+  - url: https://api.example.com/v1
+    description: Entorno de referencia (reemplazar por el real)
+tags:
+  - name: Usuarios
+  - name: Autenticación
+  - name: Wallet
+  - name: Contactos
+  - name: KYC
+security:
+  - basicAuth: []
+paths:
+  /users:
+    post:
+      tags: [Usuarios]
+      summary: Registrar usuario
+      description: Crea un usuario. Todos los campos son obligatorios. La contraseña se guarda solo como hash bcrypt.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Campo faltante o con formato inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '409':
+          description: El correo ya está registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags: [Autenticación]
+      summary: Autenticar usuario
+      description: Valida correo y contraseña enviados con Basic Auth. Ante credenciales incorrectas responde 401 genérico, sin indicar cuál campo falló.
+      responses:
+        '200':
+          description: Credenciales válidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Credenciales incorrectas
+          headers:
+            WWW-Authenticate:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /wallet:
+    get:
+      tags: [Wallet]
+      summary: Obtener la wallet del usuario autenticado
+      responses:
+        '200':
+          description: Wallet del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: El usuario aún no tiene wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags: [Wallet]
+      summary: Generar la wallet del usuario autenticado
+      description: Relación 1 a 1. Si el usuario ya tiene wallet, responde 409. No requiere KYC aprobado.
+      responses:
+        '201':
+          description: Wallet creada en estado active
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: El usuario ya tiene wallet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /contacts:
+    get:
+      tags: [Contactos]
+      summary: Listar contactos del usuario autenticado
+      responses:
+        '200':
+          description: Lista de contactos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Contactos]
+      summary: Registrar contacto
+      description: Nombre, celular y wallet_id son obligatorios. El wallet_id debe existir.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactRequest'
+      responses:
+        '201':
+          description: Contacto creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '400':
+          description: Campo faltante o con formato inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          description: El wallet_id no corresponde a una wallet existente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kyc/verifications:
+    post:
+      tags: [KYC]
+      summary: Solicitar verificación KYC
+      description: Envía los datos de identidad requeridos al proveedor externo. Solo usuarios autenticados. Si el resultado es approved, habilita payments_enabled en la wallet.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KycRequest'
+      responses:
+        '201':
+          description: Verificación registrada con su resultado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycVerification'
+        '400':
+          description: Datos de identidad faltantes o inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: El usuario ya tiene una verificación aprobada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags: [KYC]
+      summary: Consultar el estado de la última verificación KYC
+      responses:
+        '200':
+          description: Última verificación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KycVerification'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: No existe verificación para el usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  responses:
+    Unauthorized:
+      description: No autenticado o credenciales incorrectas
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [name, email, phone, password]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          pattern: '^\+?[0-9]{9,15}$'
+          description: Celular con 9 a 15 dígitos, prefijo + opcional
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 72
+          description: Máximo 72 bytes por límite de bcrypt
+    User:
+      type: object
+      required: [id, name, email, phone, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Wallet:
+      type: object
+      required: [wallet_id, status, payments_enabled, createdAt]
+      properties:
+        wallet_id:
+          type: string
+          format: uuid
+          description: UUID v4 generado por el sistema
+        status:
+          type: string
+          enum: [active]
+        payments_enabled:
+          type: boolean
+          description: true solo si la última verificación KYC está approved
+        createdAt:
+          type: string
+          format: date-time
+    ContactRequest:
+      type: object
+      required: [name, phone, wallet_id]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 120
+        phone:
+          type: string
+          pattern: '^\+?[0-9]{9,15}$'
+        wallet_id:
+          type: string
+          format: uuid
+    Contact:
+      type: object
+      required: [id, name, phone, wallet_id, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        phone:
+          type: string
+        wallet_id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+    KycRequest:
+      type: object
+      required: [documentType, documentNumber, fullName, birthDate]
+      description: Campos de identidad. La lista definitiva depende del proveedor KYC y de cumplimiento (pendiente en ADR-001).
+      properties:
+        documentType:
+          type: string
+          enum: [DNI, CE, PASSPORT]
+        documentNumber:
+          type: string
+          minLength: 1
+          maxLength: 20
+        fullName:
+          type: string
+          minLength: 1
+          maxLength: 120
+        birthDate:
+          type: string
+          format: date
+    KycVerification:
+      type: object
+      required: [id, status, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [approved, rejected, pending]
+        message:
+          type: string
+          description: Mensaje accionable con el siguiente paso cuando status no es approved
+        providerReference:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+          description: Mensaje accionable, sin datos sensibles
+    ValidationError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            fields:
+              type: array
+              items:
+                type: object
+                required: [field, message]
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
