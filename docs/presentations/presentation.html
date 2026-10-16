@@ -87,7 +87,7 @@
 
 <header>
   <h1>MVP de wallet en Perú para pagos cotidianos</h1>
-  <p>Problema, usuarios, necesidad, resultado esperado y valor de las historias H-01, H-02 y H-05</p>
+  <p style="font-family: inherit; font-size: 2rem; font-weight: bold;">Grupo 3</p>
 </header>
 
 <main>
@@ -108,7 +108,7 @@
         <p class="muted">Los pagos pueden quedar pendientes, fallar o expirar. Sin un resultado claro, aumentan los reintentos, los cobros duplicados y las consultas a soporte.</p>
       </div>
     </div>
-    <p style="margin-top:16px"><strong>Oportunidad:</strong> la línea base local muestra una adopción fuerte de pagos por alias e interoperabilidad. Esto permite lanzar ahora una wallet enfocada en pagos de bajo monto y cobro con QR.</p>
+    <p style="margin-top:16px"><strong>Oportunidad:</strong> Los pagos por alias e interoperabilidad ya tienen alta adopción en Perú. Es un buen momento para lanzar una wallet enfocada en pagos de bajo monto y cobro con QR, que atienda la necesidad insatisfecha en el mercado.</p>
   </section>
 
   <section id="usuario">
@@ -119,7 +119,7 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>Usuario de smartphone</strong> que hace transferencias diarias de bajo monto</td>
+          <td><strong>Usuario</strong> que hace transferencias diarias de bajo monto</td>
           <td>H-01 (onboarding)</td>
           <td>Registrarse, crear su wallet, registrar contactos y verificar su identidad sin abandonar el proceso.</td>
         </tr>
@@ -145,10 +145,10 @@
         <h3>Registro y activación</h3>
         <ul>
           <li>Registro con nombre, correo, celular y contraseña (hash seguro).</li>
-          <li>Wallet 1:1 con <code>wallet_id</code> único y activo.</li>
+          <li>Relacionar un usuario a un <code>wallet_id</code> único y activo (relación 1 a 1).</li>
           <li>Contactos identificados por <code>wallet_id</code> validado.</li>
-          <li>Login genérico ante error y verificación KYC.</li>
-          <li>Wallet habilitada para pagos solo con KYC aprobado.</li>
+          <li>Login genérico ante error y verificación KYC (Know Your Customer).</li>
+          <li>Wallet habilitada para pagos solo con KYC (Know Your Customer) aprobado.</li>
         </ul>
       </div>
       <div class="card">
@@ -159,7 +159,7 @@
           <li>Un único resultado final por intento: exitoso, fallido o expirado.</li>
           <li>Referencia de transacción persistida en el historial.</li>
           <li>Reintento o retorno claro, sin cobros duplicados.</li>
-          <li>Evento de activación que alimenta el cálculo de MAU.</li>
+          <li>Evento de activación que alimenta el cálculo de MAU (Usuarios activos mensuales).</li>
         </ul>
       </div>
       <div class="card">
@@ -191,7 +191,7 @@
         <p class="muted">Aporte parcial: H-01.</p>
       </div>
       <div class="card">
-        <h3>Usuarios activos (MAU)</h3>
+        <h3>MAU (Usuarios activos mensuales)</h3>
         <p class="muted">Entre 1,000 y 2,000 durante los meses 1 a 3, medido con el evento de activación de pagos exitosos.</p>
         <div class="metric">1,000 – 2,000</div>
         <p class="muted">Aporte: H-02 (criterio 6).</p>
@@ -203,34 +203,134 @@
         <p class="muted">Aporte: H-02 y H-05.</p>
       </div>
     </div>
-    <p class="muted" style="margin-top:16px">El costo de adquisición (CAC de PEN 10) no está cubierto directamente por estas tres historias. Requiere una historia de analítica aparte.</p>
+    <p class="muted" style="margin-top:16px">Nota: El costo de adquisición (CAC de PEN 10) no está cubierto directamente por estas tres historias. Requiere una historia de analítica aparte.</p>
   </section>
 
-  <section id="validacion">
-    <h2>5. Validación y aprobación</h2>
-    <p><span class="status">Aprobado con observaciones</span></p>
-    <p class="muted">Aprobado por el Product Owner con la indicación de considerar los dos puntos señalados abajo.</p>
+  <section id="tecnologia">
+    <h2>5. Tecnologías y enfoque agéntico</h2>
+    <h3>Tecnologías de desarrollo</h3>
+    <table>
+      <thead>
+        <tr><th>Tecnología</th><th>Uso en el proyecto</th><th>Por qué</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Quarkus</strong> (backend)</td>
+          <td>API REST de pagos y máquina de estados</td>
+          <td>Backend Java ligero, con arranque rápido y soporte nativo para REST.</td>
+        </tr>
+        <tr>
+          <td><strong>Angular</strong> (frontend)</td>
+          <td>App web de confirmación de pagos</td>
+          <td>Framework estándar para aplicaciones web con formularios y estado.</td>
+        </tr>
+        <tr>
+          <td><strong>SQLite</strong></td>
+          <td>Persistencia de pagos, eventos y outbox</td>
+          <td>Suficiente para el MVP sin infraestructura adicional. Limitación de un solo escritor documentada en ADR-001 y ADR-002.</td>
+        </tr>
+        <tr>
+          <td><strong>draw.io</strong></td>
+          <td>Diagramas de ADR</td>
+          <td>Diagramas en XML versionable dentro del repositorio.</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <h3>Puntos que necesitan validación</h3>
-    <ul class="checklist">
-      <li>El problema y el contexto reflejan la situación real del negocio.</li>
-      <li>Los tres perfiles (usuario, pagador, soporte) son los correctos para el MVP.</li>
-      <li>Considerar: el valor de H-01 sobre el tiempo de onboarding (8 a 3 min) es parcial, porque la historia no mide esa métrica directamente.</li>
-      <li>Considerar: CAC (PEN 10) queda fuera de estas tres historias y requiere una historia de analítica aparte.</li>
-    </ul>
+    <h3>Tecnologías agénticas</h3>
+    <table>
+      <thead>
+        <tr><th>Recurso</th><th>Uso en el proyecto</th><th>Por qué</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Prompt</strong></td>
+          <td>Instrucciones para generar ADR a partir de historias y épicas</td>
+          <td>Convierte historias y épicas en entregables consistentes.</td>
+        </tr>
+        <tr>
+          <td><strong>Skill</strong> (<code>adr-writing</code>)</td>
+          <td>Estructura obligatoria de ADR</td>
+          <td>Reutiliza la guía de redacción sin repetirla en cada prompt.</td>
+        </tr>
+        <tr>
+          <td><strong>Tools / MCP</strong></td>
+          <td>GitHub (issues), draw.io, IDE</td>
+          <td>Permite leer issues y generar diagramas sin copiar datos a mano.</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-agent</strong> (<code>arquitecto</code>)</td>
+          <td>Revisión de ADR y diagrama</td>
+          <td>Separa la redacción de la revisión de criterios de aceptación y seguridad.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-    <h3>Preguntas abiertas de las historias</h3>
-    <ul>
-      <li><strong>H-02:</strong> ¿qué regla inicial de monto bajo se configurará por proveedor o canal? ¿Cuáles son las etiquetas de los estados terminales?</li>
-      <li><strong>H-05:</strong> ¿qué categorías de disputa entran en el MVP y cuáles quedan para después? ¿Qué niveles de escalamiento y SLA aplican?</li>
-      <li><strong>H-01:</strong> requisitos de KYC y documentación pendientes de definir con cumplimiento y producto.</li>
-    </ul>
+  <section id="equipo">
+    <h2>6. Equipo</h2>
+    <p><strong>Grupo 3</strong></p>
+    <table>
+      <thead>
+        <tr><th>Rol</th><th>Integrante(s)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Product Owner (PO)</strong></td><td>Arturo Badillo</td></tr>
+        <tr><td><strong>Arquitecto</strong></td><td>Andree Rodriguez</td></tr>
+        <tr><td><strong>IA Engineer</strong></td><td>Martín Calvo, Julio Llactahuaman, Juan Quiroz</td></tr>
+        <tr><td><strong>QA &amp; Security</strong></td><td>Diana Serrano</td></tr>
+      </tbody>
+    </table>
+  </section>
 
-    <div class="approval-box">
-      <p><strong>Decisión:</strong> &#9744; Aprobado &nbsp;&nbsp; &#9744; Aprobado con cambios &nbsp;&nbsp; &#9744; No aprobado</p>
-      <p><strong>Comentarios:</strong></p>
-      <p class="muted">______________________________________________________________</p>
-      <p><strong>Aprobado por:</strong> __________________ &nbsp; <strong>Fecha:</strong> __________</p>
+  <section id="roadmap">
+    <h2>7. Roadmap del proyecto</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">SPRINT 1</span>
+        <ul>
+          <li>Crear los skills, agentes, tools, prompt, código backend y front.</li>
+          <li>Registro e inicio de sesión.</li>
+          <li>Crear los casos de validación QA.</li>
+          <li>H-01: Registro y activación del MVP de wallet.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">SPRINT 2</span>
+        <ul>
+          <li>Completar casos de integración y validación E2E backend QA.</li>
+          <li>Validación de front QA.</li>
+          <li>H-02 Registro de pagos de menor cuantía y H-05 Manejo de errores y reversas.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" style="text-align:center; padding:64px 28px;">
+    <h2 style="font-size:3rem; margin:0;">8. Demo</h2>
+  </section>
+
+  <section id="arquitectura">
+    <h2>9. Arquitectura</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">ADR-001</span>
+        <h3>Onboarding y KYC</h3>
+        <p class="muted">Arquitectura general del registro, la wallet y la verificación de identidad.</p>
+        <img src="../diagrams/ADR-001-arquitectura.png" alt="Diagrama de arquitectura ADR-001" style="width:100%;height:auto;background:#fff;border-radius:6px;">
+      </div>
+      <div class="card">
+        <span class="tag">ADR-002</span>
+        <h3>Flujo de pagos</h3>
+        <p class="muted">Confirmación de pagos de bajo monto y máquina de estados del intento.</p>
+        <img src="../diagrams/ADR-002-flujo-pagos.png" alt="Diagrama de flujo de pagos ADR-002" style="width:100%;height:auto;background:#fff;border-radius:6px;">
+      </div>
+      <div class="card">
+        <span class="tag">ADR-003</span>
+        <h3>Fallas y reversos</h3>
+        <p class="muted">Rutas de atención, vista de soporte y reversos, con la frontera de acceso por rol.</p>
+        <img src="../diagrams/ADR-003-fallas-reversos.png" alt="Diagrama de fallas y reversos ADR-003" style="width:100%;height:auto;background:#fff;border-radius:6px;">
+      </div>
     </div>
   </section>
 
