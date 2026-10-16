@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MVP de wallet en Perú: problema, usuarios y valor</title>
+  <style>
+    :root {
+      --primary: #1f4e79;
+      --accent: #2e8b57;
+      --warn: #b7791f;
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1d2939;
+      --muted: #667085;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 48px 24px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 2rem; }
+    header p { margin: 0; opacity: 0.9; }
+    main { max-width: 1040px; margin: 0 auto; padding: 24px; }
+    section {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+    }
+    h2 { color: var(--primary); margin-top: 0; font-size: 1.4rem; }
+    h3 { color: var(--text); font-size: 1.05rem; margin-bottom: 4px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .card {
+      border: 1px solid #e4e7ec;
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: #e8f0fa;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .metric { font-size: 1.8rem; font-weight: 700; color: var(--accent); margin: 4px 0; }
+    .muted { color: var(--muted); font-size: 0.92rem; }
+    ul { padding-left: 20px; margin: 8px 0; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #e4e7ec; vertical-align: top; }
+    th { background: #f0f4f8; color: var(--primary); font-size: 0.92rem; }
+    .status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: #fdf6e3;
+      color: var(--warn);
+      font-weight: 600;
+      border: 1px solid #f3d9a4;
+    }
+    .checklist li { list-style: none; margin-left: -20px; }
+    .checklist li::before { content: "\2610  "; color: var(--primary); font-size: 1.1rem; }
+    .approval-box {
+      border: 2px dashed var(--primary);
+      border-radius: 8px;
+      padding: 18px;
+      margin-top: 16px;
+    }
+    footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 16px 0 32px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MVP de wallet en Perú para pagos cotidianos</h1>
+  <p>Problema, usuarios, necesidad, resultado esperado y valor de las historias H-01, H-02 y H-05</p>
+</header>
+
+<main>
+
+  <section id="problema">
+    <h2>1. Problema y contexto</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Caída alta en checkout</h3>
+        <p class="muted">La tasa de abandono en el pago llega al 30%. Los usuarios que hacen transferencias pequeñas y frecuentes abandonan antes de confirmar.</p>
+      </div>
+      <div class="card">
+        <h3>Onboarding lento</h3>
+        <p class="muted">Completar el alta toma 8 minutos. Para quien paga a diario, esa demora es una barrera de entrada.</p>
+      </div>
+      <div class="card">
+        <h3>Incertidumbre al pagar</h3>
+        <p class="muted">Los pagos pueden quedar pendientes, fallar o expirar. Sin un resultado claro, aumentan los reintentos, los cobros duplicados y las consultas a soporte.</p>
+      </div>
+    </div>
+    <p style="margin-top:16px"><strong>Oportunidad:</strong> la línea base local muestra una adopción fuerte de pagos por alias e interoperabilidad. Esto permite lanzar ahora una wallet enfocada en pagos de bajo monto y cobro con QR.</p>
+  </section>
+
+  <section id="usuario">
+    <h2>2. Usuario y necesidad</h2>
+    <table>
+      <thead>
+        <tr><th>Perfil</th><th>Historia</th><th>Necesidad principal</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Usuario de smartphone</strong> que hace transferencias diarias de bajo monto</td>
+          <td>H-01 (onboarding)</td>
+          <td>Registrarse, crear su wallet, registrar contactos y verificar su identidad sin abandonar el proceso.</td>
+        </tr>
+        <tr>
+          <td><strong>Pagador</strong> que completa una transferencia de bajo monto</td>
+          <td>H-02 (confirmación de pago)</td>
+          <td>Saber con certeza si el pago se realizó o no, y ver a quién paga y cuánto antes de confirmar.</td>
+        </tr>
+        <tr>
+          <td><strong>Especialista de soporte</strong> al cliente</td>
+          <td>H-05 (fallas y reversos)</td>
+          <td>Clasificar fallas y disputas con reglas explícitas para atender incidentes de forma predecible.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="resultado">
+    <h2>3. Resultado esperado por historia</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">H-01</span>
+        <h3>Registro y activación</h3>
+        <ul>
+          <li>Registro con nombre, correo, celular y contraseña (hash seguro).</li>
+          <li>Wallet 1:1 con <code>wallet_id</code> único y activo.</li>
+          <li>Contactos identificados por <code>wallet_id</code> validado.</li>
+          <li>Login genérico ante error y verificación KYC.</li>
+          <li>Wallet habilitada para pagos solo con KYC aprobado.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">H-02</span>
+        <h3>Confirmación de pagos</h3>
+        <ul>
+          <li>Se muestra el destino y el monto antes de confirmar.</li>
+          <li>Un único resultado final por intento: exitoso, fallido o expirado.</li>
+          <li>Referencia de transacción persistida en el historial.</li>
+          <li>Reintento o retorno claro, sin cobros duplicados.</li>
+          <li>Evento de activación que alimenta el cálculo de MAU.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag">H-05</span>
+        <h3>Fallas y reversos</h3>
+        <ul>
+          <li>Motivo de falla legible por máquina.</li>
+          <li>Vista de soporte: reintento, investigación o disputa.</li>
+          <li>Ayuda diferencia falla técnica de transferencia ya ejecutada.</li>
+          <li>Acciones de soporte registradas con referencia y estado.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="valor">
+    <h2>4. Valor esperado</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Checkout</h3>
+        <p class="muted">Caída de 30% a 8% en el trimestre posterior al lanzamiento.</p>
+        <div class="metric">30% → 8%</div>
+        <p class="muted">Principal aporte: H-02.</p>
+      </div>
+      <div class="card">
+        <h3>Onboarding</h3>
+        <p class="muted">Tiempo de alta de 8 a 3 minutos. H-01 es la base del flujo, pero la métrica requiere medición aparte.</p>
+        <div class="metric">8 → 3 min</div>
+        <p class="muted">Aporte parcial: H-01.</p>
+      </div>
+      <div class="card">
+        <h3>Usuarios activos (MAU)</h3>
+        <p class="muted">Entre 1,000 y 2,000 durante los meses 1 a 3, medido con el evento de activación de pagos exitosos.</p>
+        <div class="metric">1,000 – 2,000</div>
+        <p class="muted">Aporte: H-02 (criterio 6).</p>
+      </div>
+      <div class="card">
+        <h3>Confianza y operación</h3>
+        <p class="muted">Resultados de pago claros y soporte predecible reducen consultas y riesgo de duplicidad financiera.</p>
+        <div class="metric">Menos incidentes</div>
+        <p class="muted">Aporte: H-02 y H-05.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:16px">El costo de adquisición (CAC de PEN 10) no está cubierto directamente por estas tres historias. Requiere una historia de analítica aparte.</p>
+  </section>
+
+  <section id="validacion">
+    <h2>5. Validación y aprobación</h2>
+    <p><span class="status">Aprobado con observaciones</span></p>
+    <p class="muted">Aprobado por el Product Owner con la indicación de considerar los dos puntos señalados abajo.</p>
+
+    <h3>Puntos que necesitan validación</h3>
+    <ul class="checklist">
+      <li>El problema y el contexto reflejan la situación real del negocio.</li>
+      <li>Los tres perfiles (usuario, pagador, soporte) son los correctos para el MVP.</li>
+      <li>Considerar: el valor de H-01 sobre el tiempo de onboarding (8 a 3 min) es parcial, porque la historia no mide esa métrica directamente.</li>
+      <li>Considerar: CAC (PEN 10) queda fuera de estas tres historias y requiere una historia de analítica aparte.</li>
+    </ul>
+
+    <h3>Preguntas abiertas de las historias</h3>
+    <ul>
+      <li><strong>H-02:</strong> ¿qué regla inicial de monto bajo se configurará por proveedor o canal? ¿Cuáles son las etiquetas de los estados terminales?</li>
+      <li><strong>H-05:</strong> ¿qué categorías de disputa entran en el MVP y cuáles quedan para después? ¿Qué niveles de escalamiento y SLA aplican?</li>
+      <li><strong>H-01:</strong> requisitos de KYC y documentación pendientes de definir con cumplimiento y producto.</li>
+    </ul>
+
+    <div class="approval-box">
+      <p><strong>Decisión:</strong> &#9744; Aprobado &nbsp;&nbsp; &#9744; Aprobado con cambios &nbsp;&nbsp; &#9744; No aprobado</p>
+      <p><strong>Comentarios:</strong></p>
+      <p class="muted">______________________________________________________________</p>
+      <p><strong>Aprobado por:</strong> __________________ &nbsp; <strong>Fecha:</strong> __________</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Fuentes: issues #1, #2 y #5 de user-bcp-student26/hackathon y la épica packages/epic/peru-wallet-mvp.sp.md
+</footer>
+
+</body>
+</html>
