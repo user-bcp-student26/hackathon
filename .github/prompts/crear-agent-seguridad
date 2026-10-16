@@ -1,0 +1,11 @@
+Toma de ejemplo el agente arquitecto y creame el agente seguridad
+
+Funciones del agente seguridad:
+Revisa riesgos y solo propone correcciones verificables, no debe modificar codigo
+Dejar un checklist enumerando los riesgos y el tipo si es critico, alto, mediano, low e informativo, tambien un campo de taggear si es un falso positivo.
+Crea los skills necesarios para cumplir tu función de agente seguridad, considera que previamente lo debo aprobar
+
+Si la vulnerabilidad es critico o alto debera crear  un Issue al repositorio de tipo seguridad donde se especifique la vulnerabilidad, solo se cree las issues previa aprobación humana.
+
+Solo crear el archivo del agente seguridad
+
