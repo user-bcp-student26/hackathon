@@ -46,7 +46,9 @@ La épica exige no asumir un único riel de procesamiento y contempla transicion
 - Al llegar a `succeeded`, se genera `transaction_reference` (UUID v4) y se persiste junto al intento. Se muestra en pantalla y en el historial.
 
 ### 6. Siguiente acción en fallo o expiración
-- `failed` y `expired` devuelven `next_actions: ["retry", "back"]`. Reintentar crea un **nuevo** intento con nueva `Idempotency-Key`, solo tras confirmación explícita del usuario.
+- `failed` devuelve `next_actions: ["retry", "back"]` solo si el proveedor confirma que no hubo cobro (`execution_status = NOT_EXECUTED`, ADR-003).
+- `expired` con resultado incierto devuelve `next_actions: ["check_status", "contact_support"]`, sin reintento, para evitar cobros duplicados (ADR-003, D2).
+- Reintentar crea un **nuevo** intento con nueva `Idempotency-Key`, solo tras confirmación explícita del usuario.
 - Los mensajes al usuario son genéricos y accionables; los detalles técnicos del proveedor solo se registran en logs internos, sin datos sensibles.
 
 ### 7. Evento de activación (MAU)

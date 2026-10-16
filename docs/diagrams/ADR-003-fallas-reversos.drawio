@@ -1,0 +1,99 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="adr-003-fallas-reversos" name="ADR-003 Fallas y reversos">
+    <mxGraphModel dx="1911" dy="1109" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="900" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="layer-ui" parent="1" style="swimlane;startSize=30;rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Capa 1 · App web (cliente)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="371" width="280" x="-49" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ui-user" parent="layer-ui" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="&lt;b&gt;Usuario final&lt;/b&gt;&lt;br&gt;Ruta A · B · C&lt;br&gt;&lt;i&gt;mensaje por user_message_key&lt;/i&gt;" vertex="1">
+          <mxGeometry height="140" width="240" x="20" y="78" as="geometry" />
+        </mxCell>
+        <mxCell id="ui-support" parent="layer-ui" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" value="&lt;b&gt;Consola de soporte&lt;/b&gt;&lt;br&gt;rol support · enmascarado" vertex="1">
+          <mxGeometry height="75" width="240" x="20" y="264" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#b85450;dashed=1;dashPattern=8 4;" value="&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Frontera de acceso por rol&lt;/b&gt;&lt;/div&gt;&lt;/b&gt;&lt;i&gt;/support/* · resolve · reversals: rol support validado en servidor&lt;/i&gt;" vertex="1">
+          <mxGeometry height="413" width="330" x="355" y="-21" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-be" parent="1" style="swimlane;startSize=30;rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;Capa 2 · Backend (Quarkus)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="518" width="503" x="340" y="-55" as="geometry" />
+        </mxCell>
+        <mxCell id="be-api" parent="layer-be" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;b&gt;API de pagos y soporte&lt;/b&gt;&lt;br&gt;GET /payments/{id}&lt;br&gt;POST /payments/{id}/resolve&lt;br&gt;POST /payments/{id}/reversals&lt;br&gt;GET /support/cases" vertex="1">
+          <mxGeometry height="90" width="290" x="20" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="be-elig" parent="layer-be" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;b&gt;Elegibilidad (calculada)&lt;/b&gt;&lt;br&gt;retry · investigate · dispute" vertex="1">
+          <mxGeometry height="60" width="290" x="20" y="213" as="geometry" />
+        </mxCell>
+        <mxCell id="kIYNauxshq8Y1lpaobrr-1" edge="1" parent="layer-be" source="be-audit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="be-elig" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="be-audit" parent="layer-be" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;b&gt;Auditoría de soporte&lt;/b&gt;&lt;br&gt;lectura y acciones registradas" vertex="1">
+          <mxGeometry height="60" width="290" x="20" y="309" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-prov" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;Capa 3 · Proveedor de pagos externo&lt;/b&gt;&lt;br&gt;consulta de estado · reverso&lt;br&gt;&lt;i&gt;PROVIDER_ERROR (503) · RESULT_UNKNOWN (504)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="110" width="260" x="880" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-db" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;Capa 4 · Almacenamiento (SQLite)&lt;/b&gt;&lt;br&gt;payments · payment_events&lt;br&gt;reversals · support_cases · support_actions&lt;br&gt;outbox_events" vertex="1">
+          <mxGeometry height="120" width="300" x="355" y="524" as="geometry" />
+        </mxCell>
+        <mxCell id="layer-pub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="&lt;b&gt;Publicador de outbox&lt;/b&gt;&lt;br&gt;payment.reversed · payment.succeeded" vertex="1">
+          <mxGeometry height="80" width="240" x="901" y="493" as="geometry" />
+        </mxCell>
+        <mxCell id="f1" edge="1" parent="1" source="ui-user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="be-api" value="① consulta de pago&lt;br&gt;(Basic Auth, HTTPS)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="91" y="215" />
+              <mxPoint x="264" y="215" />
+              <mxPoint x="264" y="35" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f2" edge="1" parent="1" source="ui-support" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="be-api" value="② caso / acción&lt;br&gt;(rol support)">
+          <mxGeometry relative="1" x="-0.1889" as="geometry">
+            <Array as="points">
+              <mxPoint x="295.3" y="358.7" />
+              <mxPoint x="295.3" y="35" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f3" edge="1" parent="1" source="be-api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="be-elig" value="③ calcula elegibilidad">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f4" edge="1" parent="1" source="be-api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;" target="layer-prov" value="④ resolve / reverso&lt;br&gt;(consulta de estado)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f5" edge="1" parent="1" source="layer-prov" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;" target="be-audit" value="⑤ resultado / aprobación tardía">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="200" />
+              <mxPoint x="749.4" y="200" />
+              <mxPoint x="749.4" y="311" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f6" edge="1" parent="1" source="be-audit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="layer-db" value="⑥ escritura en tablas&lt;br&gt;(support_actions solo inserta)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f7" edge="1" parent="1" source="layer-db" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="layer-pub" value="⑦ fila en outbox&lt;br&gt;al completar reverso">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f8" edge="1" parent="1" source="layer-pub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;" target="layer-prov" value="⑧ eventos (no bloquean respuesta)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1189" y="460" />
+              <mxPoint x="1189" y="95" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f9" edge="1" parent="1" source="be-api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="ui-user" value="⑨ user_message_key&lt;br&gt;next_actions (sin texto del proveedor)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="91" y="-0.7" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
