@@ -52,6 +52,20 @@ La épica añade restricciones: el MVP no debe asumir un único riel de procesam
 ### 7. Validaciones
 - Frontend y backend validan obligatorios y formato. El backend es la fuente de verdad.
 
+### 8. Stack tecnológico y versiones
+
+| Capa | Tecnología | Versión |
+|---|---|---|
+| Frontend | Angular | 22.2.3 |
+| Backend | Quarkus | 3.40.1 |
+| Lenguaje backend | Java (LTS) | 25 |
+| Base de datos | SQLite | Driver `org.xerial:sqlite-jdbc` 3.53.4.0 |
+
+- Comunicación frontend-backend: HTTP/JSON (ver contrato `docs/api/H01-onboarding-wallet-kyc.openapi.yaml`).
+- Diagrama de arquitectura: `docs/diagrams/ADR-001-arquitectura.drawio`.
+
+**Riesgo:** SQLite permite un solo escritor a la vez y no está pensado para alta concurrencia de pagos. Es aceptable para el MVP, pero debe evaluarse su migración antes de producción (por ejemplo, a PostgreSQL), sobre todo para idempotencia y conciliación (ver épica).
+
 ## Alternativas consideradas
 
 | Tema | Alternativa | Motivo de descarte |

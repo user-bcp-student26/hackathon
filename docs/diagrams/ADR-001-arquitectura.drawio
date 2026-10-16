@@ -7,7 +7,7 @@
         <mxCell id="fe" value="&lt;b&gt;Frontend&lt;/b&gt;&lt;br&gt;Angular&lt;br&gt;&lt;i&gt;App web (navegador)&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
           <mxGeometry x="40" y="120" width="200" height="90" as="geometry"/>
         </mxCell>
-        <mxCell id="be" value="&lt;b&gt;Backend&lt;/b&gt;&lt;br&gt;Spring Boot&lt;br&gt;&lt;i&gt;API REST&lt;/i&gt;&lt;br&gt;registro, login, wallet,&lt;br&gt;contactos, KYC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+        <mxCell id="be" value="&lt;b&gt;Backend&lt;/b&gt;&lt;br&gt;Quarkus&lt;br&gt;&lt;i&gt;API REST&lt;/i&gt;&lt;br&gt;registro, login, wallet,&lt;br&gt;contactos, KYC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
           <mxGeometry x="360" y="120" width="220" height="110" as="geometry"/>
         </mxCell>
         <mxCell id="db" value="&lt;b&gt;Base de datos&lt;/b&gt;&lt;br&gt;users, wallets,&lt;br&gt;contacts, kyc_verifications" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
